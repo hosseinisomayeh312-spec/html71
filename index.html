@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اتاق فرار ریاضی - پایه هفتم</title>
+    <style>
+        :root {
+            --primary: #d97706;
+            --secondary: #b45309;
+            --success: #10b981;
+            --danger: #ef4444;
+            --bg: #18181b;
+            --card-bg: #27272a;
+            --text: #f4f4f5;
+        }
+
+        body {
+            font-family: 'Vazirmatn', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #09090b 0%, #18181b 100%);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            align-items: center;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 750px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+            border: 2px solid #3f3f46;
+        }
+
+        header {
+            text-align: center;
+            border-bottom: 2px dashed #52525b;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: #fbbf24;
+            font-size: 1.6rem;
+            margin: 0 0 8px 0;
+        }
+
+        .meta-box {
+            background: #3f3f46;
+            padding: 8px 15px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #d4d4d8;
+            font-weight: bold;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #09090b;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #52525b;
+            margin-bottom: 25px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+            transition: width 0.4s ease;
+        }
+
+        .step-panel {
+            display: none;
+        }
+
+        .step-panel.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card {
+            background: #18181b;
+            border: 1px solid #3f3f46;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 14px;
+            background: #27272a;
+            border: 2px solid #52525b;
+            border-radius: 12px;
+            color: white;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+            outline: none;
+            margin-top: 10px;
+        }
+
+        input:focus {
+            border-color: #fbbf24;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #d97706, #b45309);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 15px;
+            box-shadow: 0 4px 15px rgba(217,119,6,0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 12px 16px;
+            border-radius: 10px;
+            display: none;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .feedback.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid var(--success);
+            color: #34d399;
+        }
+
+        .feedback.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid var(--danger);
+            color: #f87171;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            background: #18181b;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #3f3f46;
+            text-align: center;
+        }
+
+        th {
+            background: #3f3f46;
+            color: #fbbf24;
+        }
+    </style>
+</head>
+<body>
+
+<div class="game-container">
+    <header>
+        <h1>🔐 اتاق فرار ریاضی (فصل اول)</h1>
+        <div class="meta-box">
+            <span>چالش راهبردهای حل مسئله</span>
+            <span>تدوین‌گران: مهدی حسینی و سمیه حسینی</span>
+        </div>
+    </header>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <!-- مرحله ورود -->
+    <div id="step-auth" class="step-panel active">
+        <div class="card" style="text-align: center;">
+            <h2>🕵️‍♂️ به آزمایشگاه معماها خوش آمدید</h2>
+            <p style="color: #a1a1aa; margin-bottom: 20px;">برای آغاز فرار از اتاق، نام و کلاس خود را وارد کنید:</p>
+            <input type="text" id="studentName" placeholder="نام و نام خانوادگی...">
+            <input type="text" id="className" placeholder="نام کلاس (مثلاً: هفتم ۱)..." style="margin-top: 15px;">
+            <button class="btn" onclick="startGame()">باز کردن درِ اول 🚪</button>
+        </div>
+    </div>
+
+    <!-- پنل معماها -->
+    <div id="step-game" class="step-panel">
+        <div class="card">
+            <h3 id="roomTitle" style="color: #fbbf24; margin-top:0;"></h3>
+            <p id="roomDesc" style="font-size: 1.1rem; line-height: 1.8; color: #e4e4e7;"></p>
+            <input type="number" id="userAnswer" placeholder="پاسخ رمز را وارد کنید...">
+            <button id="checkBtn" class="btn" onclick="checkAnswer()">تست رمز عبور 🔑</button>
+            <div id="feedback" class="feedback"></div>
+        </div>
+        <button id="nextBtn" class="btn" style="display:none; background: #059669;" onclick="nextRoom()">عبور از این در ➔</button>
+    </div>
+
+    <!-- مرحله پیروزی -->
+    <div id="step-finish" class="step-panel">
+        <div class="card" style="text-align: center;">
+            <h2 style="color: #34d399; font-size: 1.5rem;">🎉 تبریک! شما با موفقیت از تمام درها فرار کردید!</h2>
+            <div id="summaryReport" style="text-align: right; margin: 20px 0; font-size: 1.05rem; background: #27272a; padding: 15px; border-radius: 10px;"></div>
+        </div>
+
+        <div class="card">
+            <h3>📊 پنل مدیریت معلم (ثبت نتایج اتاق فرار)</h3>
+            <div style="overflow-x: auto;">
+                <table id="teacherTable">
+                    <thead>
+                        <tr>
+                            <th>نام کارآگاه</th>
+                            <th>کلاس</th>
+                            <th>تعداد تلاش‌ها</th>
+                            <th>وضعیت</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            <button class="btn" style="background: #52525b; margin-top:20px;" onclick="resetGame()">شروع مجدد برای نفر بعدی 🔄</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const rooms = [
+        {
+            title: "🚪 درِ اول: دیوار آجری (راهبرد رسم شکل)",
+            desc: "برای رسیدن به کلید، باید از یک دیوار ۵ متری بالا بروید. مورچه‌ای در هر ثانیه ۲ متر بالا می‌آید اما ۱ متر سر می‌خورد و پایین می‌آید. این مورچه در ثانیه چندم به بالای دیوار می‌رسد؟",
+            correct: 4,
+            hint: "راهنمایی: در ثانیه چهارم، مورچه ۲ متر بالا می‌آید و به لبه ۵ متری می‌رسد و دیگر سر نمی‌خورد!"
+        },
+        {
+            title: "🚪 درِ دوم: کمد سفر (راهبرد الگوسازی)",
+            desc: "شما برای سفر ۳ رنگ کلاه (قرمز، آبی، زرد) و ۲ مدل عینک (آفتابی، طبی) دارید. اگر بخواهید تمام حالت‌های مختلفِ پوشیدن کلاه و عینک را بدون تکرار بنویسید، چند حالت مختلف به دست می‌آید؟",
+            correct: 6,
+            hint: "راهنمایی: تعداد کلاه‌ها را در تعداد عینک‌ها ضرب کنید (۳ × ۲)."
+        },
+        {
+            title: "🚪 درِ سوم: گاوصندوق امنیتی (حذف حالت‌های نامطلوب)",
+            desc: "رمز گاوصندوق یک عدد ۳ رقمی است: رقم صدگان فرد است، رقم دهگان بزرگ‌تر از ۷ است، مجموع سه رقم برابر ۱۰ می‌شود، و تمام رقم‌های آن با هم متفاوت هستند. رقم یکان گاوصندوق چند است؟",
+            correct: 0,
+            hint: "راهنمایی: صدگان ۱ و دهگان ۹ باشد، مجموع می‌شود ۱۰ و یکان باید ۰ باشد (عدد ۱۹۰)."
+        },
+        {
+            title: "🚪 درِ چهارم: قلک جادویی (راهبرد الگویابی)",
+            desc: "شما روز اول ۵ هزار تومان، روز دوم ۱۰ هزار تومان، روز سوم ۱۵ هزار تومان و... در قلک می‌اندازید. در مجموع تا پایان روز چهارم، چند هزار تومان پول توی قلک جمع کرده‌اید؟",
+            correct: 50,
+            hint: "راهنمایی: پول هر ۴ روز را با هم جمع کنید: (۵ + ۱۰ + ۱۵ + ۲۰)."
+        }
+    ];
+
+    let currentRoom = 0, totalAttempts = 0;
+    let student = { name: '', className: '' };
+
+    function startGame() {
+        const name = document.getElementById('studentName').value.trim();
+        const cls = document.getElementById('className').value.trim();
+        if (!name || !cls) { alert('لطفاً نام و کلاس خود را وارد کنید!'); return; }
+        student.name = name; student.className = cls;
+        document.getElementById('step-auth').classList.remove('active');
+        document.getElementById('step-game').classList.add('active');
+        loadRoom();
+    }
+
+    function loadRoom() {
+        const r = rooms[currentRoom];
+        document.getElementById('roomTitle').innerText = r.title;
+        document.getElementById('roomDesc').innerText = r.desc;
+        document.getElementById('userAnswer').value = '';
+        document.getElementById('feedback').style.display = 'none';
+        document.getElementById('nextBtn').style.display = 'none';
+        document.getElementById('checkBtn').style.display = 'block';
+        document.getElementById('progressFill').style.width = (currentRoom / rooms.length) * 100 + '%';
+    }
+
+    function checkAnswer() {
+        const ans = parseFloat(document.getElementById('userAnswer').value);
+        const r = rooms[currentRoom];
+        const fb = document.getElementById('feedback');
+        totalAttempts++;
+
+        if (ans === r.correct) {
+            fb.className = 'feedback success';
+            fb.innerText = '✨ آفرین! رمز درست بود و در باز شد.';
+            fb.style.display = 'block';
+            document.getElementById('checkBtn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+        } else {
+            fb.className = 'feedback error';
+            fb.innerText = '❌ رمز اشتباه است! ' + r.hint;
+            fb.style.display = 'block';
+        }
+    }
+
+    function nextRoom() {
+        currentRoom++;
+        if (currentRoom < rooms.length) loadRoom();
+        else finishGame();
+    }
+
+    function finishGame() {
+        document.getElementById('progressFill').style.width = '100%';
+        document.getElementById('step-game').classList.remove('active');
+        document.getElementById('step-finish').classList.add('active');
+
+        let data = JSON.parse(localStorage.getItem('escape_room_ch1') || '[]');
+        data.push({ name: student.name, className: student.className, attempts: totalAttempts });
+        localStorage.setItem('escape_room_ch1', JSON.stringify(data));
+
+        document.getElementById('summaryReport').innerHTML = `
+            <p><strong>👤 نام کارآگاه:</strong> ${student.name}</p>
+            <p><strong>🏫 کلاس:</strong> ${student.className}</p>
+            <p><strong>🎯 کل تلاش‌ها:</strong> ${totalAttempts} بار</p>
+            <p><strong>🏅 درجه:</strong> استاد فرار از اتاق معماها</p>
+        `;
+        renderTable();
+    }
+
+    function renderTable() {
+        let data = JSON.parse(localStorage.getItem('escape_room_ch1') || '[]');
+        const tbody = document.querySelector('#teacherTable tbody');
+        tbody.innerHTML = '';
+        data.forEach(item => {
+            tbody.innerHTML += `<tr><td>${item.name}</td><td>${item.className}</td><td>${item.attempts}</td><td><span style="color:#34d399; font-weight:bold;">فرار موفق 🏆</span></td></tr>`;
+        });
+    }
+
+    function resetGame() {
+        currentRoom = 0; totalAttempts = 0;
+        document.getElementById('step-finish').classList.remove('active');
+        document.getElementById('step-auth').classList.add('active');
+        document.getElementById('studentName').value = '';
+        document.getElementById('className').value = '';
+        document.getElementById('progressFill').style.width = '0%';
+    }
+</script>
+
+</body>
+</html>
